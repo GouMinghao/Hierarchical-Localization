@@ -3,6 +3,7 @@ import random
 import numpy as np
 import pickle
 import pycolmap
+import cv2
 
 from .utils.viz import (
         plot_images, plot_keypoints, plot_matches, cm_RdGn, add_text)
@@ -137,3 +138,20 @@ def visualize_loc_from_log(image_dir, query_name, loc, reconstruction=None,
         opts = dict(pos=(0.01, 0.01), fs=5, lcolor=None, va='bottom')
         add_text(0, query_name, **opts)
         add_text(1, db_name, **opts)
+
+def vis_img_with_kpts(img, kpts):
+    """_summary_
+
+    Args:
+        img (np.array): image
+        kpts (np.array): n, 2
+
+    Returns:
+        np.array: image with vis kpts
+    """
+    cv2_kpts = []
+    for i in range(len(kpts)):
+        cv_kpt = cv2.KeyPoint(kpts[i][0], kpts[i][1], 1)
+        cv2_kpts.append(cv_kpt)
+    new_img = cv2.drawKeypoints(img, cv2_kpts, 0)
+    return new_img
